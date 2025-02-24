@@ -132,6 +132,7 @@ export function Component(): JSX.Element {
                         vector_fields: vectorFieldList,
                         use_gpt4v: useGPT4V,
                         gpt4v_input: gpt4vInput,
+                        useSerpAPI: useSerpAPI,
                         language: i18n.language,
                         ...(seed !== null ? { seed: seed } : {})
                     }
