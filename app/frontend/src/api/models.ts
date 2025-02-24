@@ -16,6 +16,18 @@ export const enum VectorFieldOptions {
     Both = "both"
 }
 
+export const enum SerpAPILanguageOptions{
+    en="en",
+    ko="ko",
+    ja="ja"
+}
+export const enum SerpAPILocalOptions{
+    us="us",
+    kr="kr",
+    jp="jp"
+}
+
+
 export type ChatAppRequestOverrides = {
     retrieval_mode?: RetrievalMode;
     semantic_ranker?: boolean;
@@ -34,7 +46,10 @@ export type ChatAppRequestOverrides = {
     use_oid_security_filter?: boolean;
     use_groups_security_filter?: boolean;
     use_gpt4v?: boolean;
-    useSerpAPI?: boolean;
+    useSerpAPI?: boolean; //SerpAPI 사용 여부
+    SerpAPINum?: number; //SerpAPI 검색 수
+    SerpAPILanguage?: SerpAPILanguageOptions //SerpAPI 언어
+    SerpAPILocal?: SerpAPILocalOptions //SerpAPI 지역
     gpt4v_input?: GPT4VInput;
     vector_fields: VectorFieldOptions[];
     language: string;

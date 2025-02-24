@@ -23,7 +23,7 @@ class ChatApproach(Approach, ABC):
         if isinstance(chat_completion, dict):
             if chat_completion.get("object") == "chat.completion.chunk":
                 if "choices" not in chat_completion or not chat_completion["choices"]:
-                    logging.warning("⚠️ OpenAI 응답에 'choices'가 없음.")
+                    logging.warning("OpenAI 응답에 'choices'가 없음.")
                     return user_query
                 response_delta = chat_completion["choices"][0].get("delta", {})
                 # None 처리 추가
@@ -91,7 +91,10 @@ class ChatApproach(Approach, ABC):
         # web_search_results = self.search_with_serpapi(user_query)
         if overrides.get("useSerpAPI"): 
             logging.info(f"SerpAPI 검색어: {user_query}")
-            web_search_results = self.search_with_serpapi(user_query)
+            serp_api_language = overrides.get("SerpAPILanguage", "ko")  # 기본값: "ko"
+            serp_api_local = overrides.get("SerpAPILocal", "kr")  # 기본값: "kr"
+            serp_api_num = overrides.get("SerpAPINum", 3)  # 기본값: 3
+            web_search_results = self.search_with_serpapi(user_query, serp_api_language, serp_api_local, serp_api_num)
             content += f"\n\n web 검색 결과 : {web_search_results}"
             extra_info["serpapi_search_results"] = web_search_results
             
@@ -164,7 +167,10 @@ class ChatApproach(Approach, ABC):
                 chat_completion_response = event
         if overrides.get("useSerpAPI"):
             logging.info(f"SerpAPI 검색어: {user_query}")
-            web_search_results = self.search_with_serpapi(user_query)
+            serp_api_language = overrides.get("SerpAPILanguage", "ko")  # 기본값: "ko"
+            serp_api_local = overrides.get("SerpAPILocal", "kr")  # 기본값: "kr"
+            serp_api_num = overrides.get("SerpAPINum", 3)  # 기본값: 3
+            web_search_results = self.search_with_serpapi(user_query, serp_api_language, serp_api_local, serp_api_num)
             yield {"delta": {"role": "assistant", "content": f"\n\n**웹 검색 결과**\n{web_search_results}"}}
         logging.info(f"검색 결과: {web_search_results}")
         

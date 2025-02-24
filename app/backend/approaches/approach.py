@@ -135,17 +135,17 @@ class Approach(ABC):
         self.vision_token_provider = vision_token_provider
         self.prompt_manager = prompt_manager
     
-    def search_with_serpapi(self, query: str) -> str:
+    def search_with_serpapi(self, query: str, language: str = "ko", local: str = "kr", num: int = 3) -> str:
         """
         SerpAPI를 사용하여 웹 검색을 수행하는 메서드.
         """
         try:
             params = {
                 "q": query, #검색어
-                "hl": "en", #언어 설정
-                "gl": "us", #지역 설정
+                "hl": language, #언어 설정
+                "gl": local, #지역 설정
                 "api_key": SERPAPI_KEY, #API 키
-                "num": 5  # 최대 5개의 검색 결과 반환
+                "num": num  # 최대 5개의 검색 결과 반환
             }
             search = GoogleSearch(params) #구글 검색 결과
             results = search.get_dict() #검색 결과를 dictionary화
@@ -155,14 +155,14 @@ class Approach(ABC):
                 logging.warning("웹 검색 결과 없음")
                 return "No search results available."
             #결과가 있다면...
-            search_results = results.get("organic_results", [])[:3]
+            search_results = results.get("organic_results", [])
             return "\n".join([f"{idx+1}. {res['title']} - {res['link']}" for idx, res in enumerate(search_results)])
 
         except Exception as e:
             logging.error(f"웹 검색 중 오류 발생: {str(e)}")
             return f"Error during search: {str(e)}"
         
-    def get_search_query(self, chat_completion: ChatCompletion, user_query: str) -> str:
+    def get_search_query(self, chat_completion: ChatCompletion, user_query: str, language: str = "ko", local: str = "kr", num: int = 3) -> str:
         """
         OpenAI 응답에서 검색 쿼리를 추출하고, 필요하면 SerpAPI를 통해 검색 수행.
         """
@@ -179,7 +179,7 @@ class Approach(ABC):
 
                     if search_query != self.NO_RESPONSE:
                         logging.info(f"AI 검색 요청: {search_query}")
-                        return self.search_with_serpapi(search_query)  # 🔥 웹 검색 수행
+                        return self.search_with_serpapi(search_query, language, local, num)  # 🔥 웹 검색 수행
                     return user_query
 
         elif query_text := response_message.content:

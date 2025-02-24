@@ -4,7 +4,7 @@ import { TextField, ITextFieldProps, Checkbox, ICheckboxProps, Dropdown, IDropdo
 import { HelpCallout } from "../HelpCallout";
 import { GPT4VSettings } from "../GPT4VSettings";
 import { VectorSettings } from "../VectorSettings";
-import { RetrievalMode, VectorFieldOptions, GPT4VInput } from "../../api";
+import { RetrievalMode, VectorFieldOptions, GPT4VInput, SerpAPILanguageOptions, SerpAPILocalOptions } from "../../api";
 import styles from "./Settings.module.css";
 
 // Add type for onRenderLabel
@@ -24,6 +24,9 @@ export interface SettingsProps {
     retrievalMode: RetrievalMode;
     useGPT4V: boolean;
     useSerpAPI:boolean;
+    SerpAPINum:number;
+    SerpAPILanguage:SerpAPILanguageOptions;
+    SerpAPILocal:SerpAPILocalOptions;
     gpt4vInput: GPT4VInput;
     vectorFieldList: VectorFieldOptions[];
     showSemanticRankerOption: boolean;
@@ -57,6 +60,9 @@ export const Settings = ({
     retrievalMode,
     useGPT4V,
     useSerpAPI,
+    SerpAPINum,
+    SerpAPILanguage,
+    SerpAPILocal,
     gpt4vInput,
     vectorFieldList,
     showSemanticRankerOption,
@@ -106,7 +112,9 @@ export const Settings = ({
     const shouldStreamFieldId = useId("shouldStreamField");
     const suggestFollowupQuestionsId = useId("suggestFollowupQuestions");
     const suggestFollowupQuestionsFieldId = useId("suggestFollowupQuestionsField");
-
+    const SerpApiLanguageFieldId = useId("SerpApiLanguageField");
+    const SerpApiLocalFieldId = useId("SerpApiLocalField");
+    const SerpApiNumFieldId = useId("SerpApiNumField")
     const renderLabel = (props: RenderLabelType | undefined, labelId: string, fieldId: string, helpText: string) => (
         <HelpCallout labelId={labelId} fieldId={fieldId} helpText={helpText} label={props?.label} />
     );
@@ -215,7 +223,43 @@ export const Settings = ({
                 aria-labelledby={excludeCategoryId}
                 onRenderLabel={props => renderLabel(props, excludeCategoryId, excludeCategoryFieldId, t("helpTexts.excludeCategory"))}
             />
-
+            <TextField
+                id={SerpApiNumFieldId}
+                className={styles.settingsSeparator}
+                label="SerpAPI 검색 결과 개수"
+                type="number"
+                min={1}
+                max={10} // 검색 결과 최대 개수
+                defaultValue={SerpAPINum.toString()}
+                onChange={(_ev, val) => onChange("SerpAPINum", parseInt(val || "3"))}
+                aria-labelledby="SerpApiNumId"
+            />
+            <Dropdown
+                id={SerpApiLanguageFieldId}
+                className={styles.settingsSeparator}
+                label="SerpAPI 검색 언어"
+                selectedKey={SerpAPILanguage}
+                options={[
+                    { key: SerpAPILanguageOptions.en, text: "English" },
+                    { key: SerpAPILanguageOptions.ko, text: "Korean" },
+                    { key: SerpAPILanguageOptions.ja, text: "Japanese" }
+                ]}
+                onChange={(_ev, option) => onChange("SerpAPILanguage", option?.key)}
+                aria-labelledby="SerpApiLanguageId"
+            />
+            <Dropdown
+                id={SerpApiLocalFieldId}
+                className={styles.settingsSeparator}
+                label="SerpAPI 검색 지역"
+                selectedKey={SerpAPILocal}
+                options={[
+                    { key: SerpAPILocalOptions.us, text: "United States" },
+                    { key: SerpAPILocalOptions.kr, text: "Korea" },
+                    { key: SerpAPILocalOptions.jp, text: "Japan" }
+                ]}
+                onChange={(_ev, option) => onChange("SerpAPILocal", option?.key)}
+                aria-labelledby="SerpApiLocalId"
+            />
             {showSemanticRankerOption && (
                 <>
                     <Checkbox

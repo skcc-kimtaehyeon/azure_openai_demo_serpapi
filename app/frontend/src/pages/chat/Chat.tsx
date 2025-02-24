@@ -17,7 +17,9 @@ import {
     ResponseMessage,
     VectorFieldOptions,
     GPT4VInput,
-    SpeechConfig
+    SpeechConfig,
+    SerpAPILanguageOptions,
+    SerpAPILocalOptions
 } from "../../api";
 import { Answer, AnswerError, AnswerLoading } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
@@ -60,7 +62,10 @@ const Chat = () => {
     const [useGPT4V, setUseGPT4V] = useState<boolean>(false);
 
     const [useSerpAPI, setSerpAPI] = useState<boolean>(false);
-
+    const [SerpAPINum, setSerpAPINum] = useState<number> (3);
+    const [SerpAPILanguage, setSerpAPILanguage] = useState<SerpAPILanguageOptions>(SerpAPILanguageOptions.ko)
+    const [SerpAPILocal, setSerpAPILocal] = useState<SerpAPILocalOptions> (SerpAPILocalOptions.kr)
+    
     const lastQuestionRef = useRef<string>("");
     const chatMessageStreamEnd = useRef<HTMLDivElement | null>(null);
 
@@ -206,6 +211,9 @@ const Chat = () => {
                         use_gpt4v: useGPT4V,
                         gpt4v_input: gpt4vInput,
                         useSerpAPI: useSerpAPI,
+                        SerpAPINum: SerpAPINum,
+                        SerpAPILanguage: SerpAPILanguage,
+                        SerpAPILocal:SerpAPILocal,
                         language: i18n.language,
                         ...(seed !== null ? { seed: seed } : {})
                     }
@@ -323,6 +331,15 @@ const Chat = () => {
                 break;
             case "useSerpAPI":
                 setSerpAPI(value);
+                break;
+            case "SerpAPINum":
+                setSerpAPINum(value);
+                break;
+            case "SerpAPILanguage":
+                setSerpAPILanguage(value);
+                break;
+            case "SerpAPILocal":
+                setSerpAPILocal(value);
                 break;
         }
     };
@@ -511,6 +528,9 @@ const Chat = () => {
                         retrievalMode={retrievalMode}
                         useGPT4V={useGPT4V}
                         useSerpAPI={useSerpAPI}
+                        SerpAPINum={SerpAPINum}
+                        SerpAPILanguage={SerpAPILanguage}
+                        SerpAPILocal={SerpAPILocal}
                         gpt4vInput={gpt4vInput}
                         vectorFieldList={vectorFieldList}
                         showSemanticRankerOption={showSemanticRankerOption}

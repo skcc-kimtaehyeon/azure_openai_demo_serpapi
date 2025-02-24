@@ -93,6 +93,23 @@
         "useSuggestFollowupQuestions": "Sugerir preguntas de seguimiento",
         "useGPT4V": "Usar modelo de visión GPT",
         "useSerpAPI": "Use SerpAPI search",
+        "SerpAPINum": "Set Number of Search results",
+        "SerpAPILanguage":{
+            "label": "Select SerpAPI Language",
+            "options":{
+                "ko": "Korean",
+                "en": "English",
+                "ja": "Japanese"
+            }
+        },
+        "SerpAPILocal":{
+            "label": "Select SerpAPI Location",
+            "options":{
+                "kr": "Republic Of Korea",
+                "us": "United States",
+                "jp": "Japan"
+            }
+        },
         "gpt4VInput": {
             "label": "Entradas del modelo de visión GPT",
             "options": {

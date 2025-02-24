@@ -89,6 +89,23 @@
         "useSuggestFollowupQuestions": "Foreslå opfølgende spørgsmål",
         "useGPT4V": "Brug GPT vision model",
         "useSerpAPI": "Use SerpAPI search",
+        "SerpAPINum": "Set Number of Search results",
+        "SerpAPILanguage":{
+            "label": "Select SerpAPI Language",
+            "options":{
+                "ko": "Korean",
+                "en": "English",
+                "ja": "Japanese"
+            }
+        },
+        "SerpAPILocal":{
+            "label": "Select SerpAPI Location",
+            "options":{
+                "kr": "Republic Of Korea",
+                "us": "United States",
+                "jp": "Japan"
+            }
+        },
         "gpt4VInput": {
             "label": "GPT vision model input",
             "options": {

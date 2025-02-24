@@ -5,7 +5,7 @@ import { Panel, DefaultButton, Spinner } from "@fluentui/react";
 
 import styles from "./Ask.module.css";
 
-import { askApi, configApi, ChatAppResponse, ChatAppRequest, RetrievalMode, VectorFieldOptions, GPT4VInput, SpeechConfig } from "../../api";
+import { askApi, configApi, ChatAppResponse, ChatAppRequest, RetrievalMode, VectorFieldOptions, GPT4VInput, SpeechConfig, SerpAPILanguageOptions, SerpAPILocalOptions } from "../../api";
 import { Answer, AnswerError } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
 import { ExampleList } from "../../components/Example";
@@ -33,7 +33,12 @@ export function Component(): JSX.Element {
     const [useSemanticRanker, setUseSemanticRanker] = useState<boolean>(true);
     const [useSemanticCaptions, setUseSemanticCaptions] = useState<boolean>(false);
     const [useGPT4V, setUseGPT4V] = useState<boolean>(false);
+    
     const [useSerpAPI,setSerpAPI]=useState<boolean>(false);
+    const [SerpAPINum, setSerpAPINum] = useState<number> (3);
+    const [SerpAPILanguage, setSerpAPILanguage] = useState<SerpAPILanguageOptions>(SerpAPILanguageOptions.ko)
+    const [SerpAPILocal, setSerpAPILocal] = useState<SerpAPILocalOptions> (SerpAPILocalOptions.kr)
+
     const [gpt4vInput, setGPT4VInput] = useState<GPT4VInput>(GPT4VInput.TextAndImages);
     const [includeCategory, setIncludeCategory] = useState<string>("");
     const [excludeCategory, setExcludeCategory] = useState<string>("");
@@ -133,6 +138,9 @@ export function Component(): JSX.Element {
                         use_gpt4v: useGPT4V,
                         gpt4v_input: gpt4vInput,
                         useSerpAPI: useSerpAPI,
+                        SerpAPINum: SerpAPINum,
+                        SerpAPILanguage: SerpAPILanguage,
+                        SerpAPILocal:SerpAPILocal,
                         language: i18n.language,
                         ...(seed !== null ? { seed: seed } : {})
                     }
@@ -199,6 +207,15 @@ export function Component(): JSX.Element {
                 break;
             case "useSerpAPI":
                 setSerpAPI(value);
+                break;
+            case "SerpAPINum":
+                setSerpAPINum(value);
+                break;
+            case "SerpAPILanguage":
+                setSerpAPILanguage(value);
+                break;
+            case "SerpAPILocal":
+                setSerpAPILocal(value);
                 break;
             case "gpt4vInput":
                 setGPT4VInput(value);
@@ -331,6 +348,9 @@ export function Component(): JSX.Element {
                     retrievalMode={retrievalMode}
                     useGPT4V={useGPT4V}
                     useSerpAPI={useSerpAPI}
+                    SerpAPINum={SerpAPINum}
+                    SerpAPILanguage={SerpAPILanguage}
+                    SerpAPILocal={SerpAPILocal}
                     gpt4vInput={gpt4vInput}
                     vectorFieldList={vectorFieldList}
                     showSemanticRankerOption={showSemanticRankerOption}
