@@ -102,13 +102,13 @@ class ChatApproach(Approach, ABC):
         
         # ✅ SerpAPI 검색 결과 추가
         if web_search_results:
+            content += f"\n\n web 검색 결과 : {web_search_results}"
             extra_info["serpapi_search_results"] = web_search_results
 
         
         if overrides.get("suggest_followup_questions"):
             content, followup_questions = self.extract_followup_questions(content)
             extra_info["followup_questions"] = followup_questions
-        content += f"\n\n web 검색 결과 : {web_search_results}"
         chat_app_response = {
             "message": {"content": content, "role": role},
             "context": extra_info,
@@ -126,7 +126,7 @@ class ChatApproach(Approach, ABC):
         
         user_query = messages[-1]["content"]
 
-        # ✅ OpenAI가 검색 요청을 하면 SerpAPI를 실행하여 쿼리 수정
+        # OpenAI가 검색 요청을 하면 SerpAPI를 실행하여 쿼리 수정
         web_search_results = ""
         # web_search_results = self.search_with_serpapi(user_query)
         if overrides.get("use_serpapi_search", True): #app.py에서 설정한 overrides의 use_serpapi_search = True를 여기서 활용
@@ -175,7 +175,8 @@ class ChatApproach(Approach, ABC):
         #     if search_query != user_query:  # OpenAI가 새로운 검색어를 생성한 경우
         #         logging.info(f"🔎 OpenAI가 검색 요청을 감지함: {search_query}")
         #         web_search_results = self.search_with_serpapi(search_query)
-
+        if web_search_results:
+            yield {"delta": {"role": "assistant", "content": f"\n\n**웹 검색 결과**\n{web_search_results}"}}
         if followup_content:
             _, followup_questions = self.extract_followup_questions(followup_content)
             yield {"delta": {"role": "assistant"}, "context": {"followup_questions": followup_questions}}
