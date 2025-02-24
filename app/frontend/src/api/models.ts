@@ -34,6 +34,7 @@ export type ChatAppRequestOverrides = {
     use_oid_security_filter?: boolean;
     use_groups_security_filter?: boolean;
     use_gpt4v?: boolean;
+    useSerpAPI?: boolean;
     gpt4v_input?: GPT4VInput;
     vector_fields: VectorFieldOptions[];
     language: string;

@@ -23,6 +23,7 @@ export interface SettingsProps {
     includeCategory: string;
     retrievalMode: RetrievalMode;
     useGPT4V: boolean;
+    useSerpAPI:boolean;
     gpt4vInput: GPT4VInput;
     vectorFieldList: VectorFieldOptions[];
     showSemanticRankerOption: boolean;
@@ -55,6 +56,7 @@ export const Settings = ({
     includeCategory,
     retrievalMode,
     useGPT4V,
+    useSerpAPI,
     gpt4vInput,
     vectorFieldList,
     showSemanticRankerOption,
@@ -275,6 +277,7 @@ export const Settings = ({
                 />
             )}
 
+            
             {showVectorOption && (
                 <VectorSettings
                     defaultRetrievalMode={retrievalMode}
@@ -296,7 +299,17 @@ export const Settings = ({
                     onRenderLabel={props => renderLabel(props, shouldStreamId, shouldStreamFieldId, t("helpTexts.streamChat"))}
                 />
             )}
-
+            {/* SerpAPI 사용 여부 설정 */}
+            {useSerpAPI != undefined &&(
+                <Checkbox
+                    id="useSerpAPIField"
+                    className={styles.settingsSeparator}
+                    checked={useSerpAPI}
+                    label={t("labels.useSerpAPI")}
+                    onChange={(_ev, checked) => onChange("useSerpAPI", !!checked)}
+                    aria-labelledby="useSerpAPIId"
+                />
+            )}
             {/* Followup questions checkbox for Chat */}
             {showSuggestFollowupQuestions && (
                 <Checkbox

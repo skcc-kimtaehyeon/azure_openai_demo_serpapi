@@ -92,6 +92,7 @@
         "useSemanticCaptions": "Anlamsal altyazılar kullan",
         "useSuggestFollowupQuestions": "Takip soruları öner",
         "useGPT4V": "GPT vizyon modelini kullan",
+        "useSerpAPI": "Use SerpAPI search",
         "gpt4VInput": {
             "label": "GPT vizyon modeli girdileri",
             "options": {

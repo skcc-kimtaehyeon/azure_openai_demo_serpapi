@@ -77,12 +77,7 @@ class ChatApproach(Approach, ABC):
         user_query = messages[-1]["content"]
 
         # ✅ OpenAI가 검색 요청을 하면 SerpAPI를 실행하여 쿼리 수정
-        web_search_results = ""
-        # web_search_results = self.search_with_serpapi(user_query)
-        if overrides.get("use_serpapi_search", True): #app.py에서 설정한 overrides의 use_serpapi_search = True를 여기서 활용
-            logging.info(f"SerpAPI 검색어: {user_query}")
-            web_search_results = self.search_with_serpapi(user_query)
-        logging.info(f"검색 결과: {web_search_results}")
+        
         
         # OpenAI API 호출        
         extra_info, chat_coroutine = await self.run_until_final_call(
@@ -92,19 +87,21 @@ class ChatApproach(Approach, ABC):
         chat_completion_response: ChatCompletion = await chat_coroutine
         content = chat_completion_response.choices[0].message.content
         role = chat_completion_response.choices[0].message.role
-        
+        web_search_results = ""
+        # web_search_results = self.search_with_serpapi(user_query)
+        if overrides.get("useSerpAPI"): 
+            logging.info(f"SerpAPI 검색어: {user_query}")
+            web_search_results = self.search_with_serpapi(user_query)
+            content += f"\n\n web 검색 결과 : {web_search_results}"
+            extra_info["serpapi_search_results"] = web_search_results
+            
+        logging.info(f"검색 결과: {web_search_results}")
         # web_search_results = ""
         # if overrides.get("use_serpapi_search", True):
         #     search_query = self.get_search_query(chat_completion_response, user_query)
         #     if search_query != user_query:  # OpenAI가 새로운 검색어를 생성한 경우
         #         logging.info(f"OpenAI가 검색 요청을 감지함: {search_query}")
         #         web_search_results = self.search_with_serpapi(search_query)
-        
-        # ✅ SerpAPI 검색 결과 추가
-        if web_search_results:
-            content += f"\n\n web 검색 결과 : {web_search_results}"
-            extra_info["serpapi_search_results"] = web_search_results
-
         
         if overrides.get("suggest_followup_questions"):
             content, followup_questions = self.extract_followup_questions(content)
@@ -129,10 +126,7 @@ class ChatApproach(Approach, ABC):
         # OpenAI가 검색 요청을 하면 SerpAPI를 실행하여 쿼리 수정
         web_search_results = ""
         # web_search_results = self.search_with_serpapi(user_query)
-        if overrides.get("use_serpapi_search", True): #app.py에서 설정한 overrides의 use_serpapi_search = True를 여기서 활용
-            logging.info(f"SerpAPI 검색어: {user_query}")
-            web_search_results = self.search_with_serpapi(user_query)
-        logging.info(f"검색 결과: {web_search_results}")
+        
         
         extra_info, chat_coroutine = await self.run_until_final_call(
             messages, overrides, auth_claims, should_stream=True
@@ -168,24 +162,18 @@ class ChatApproach(Approach, ABC):
                 else:
                     yield completion
                 chat_completion_response = event
-        # ✅ OpenAI 응답에서 검색 요청을 감지하고 SerpAPI 검색 수행
-        # web_search_results = ""
-        # if overrides.get("use_serpapi_search", True) and chat_completion_response:
-        #     search_query = self.get_search_query(chat_completion_response, user_query)
-        #     if search_query != user_query:  # OpenAI가 새로운 검색어를 생성한 경우
-        #         logging.info(f"🔎 OpenAI가 검색 요청을 감지함: {search_query}")
-        #         web_search_results = self.search_with_serpapi(search_query)
-        if web_search_results:
+        if overrides.get("useSerpAPI"):
+            logging.info(f"SerpAPI 검색어: {user_query}")
+            web_search_results = self.search_with_serpapi(user_query)
             yield {"delta": {"role": "assistant", "content": f"\n\n**웹 검색 결과**\n{web_search_results}"}}
+        logging.info(f"검색 결과: {web_search_results}")
+        
         if followup_content:
             _, followup_questions = self.extract_followup_questions(followup_content)
             yield {"delta": {"role": "assistant"}, "context": {"followup_questions": followup_questions}}
-        # ✅ SerpAPI 검색 결과 추가
-        if web_search_results:
-            yield {"delta": {"role": "assistant"}, "context": {"serpapi_search_results": web_search_results}}
+        # if web_search_results:
+        #     yield {"delta": {"role": "assistant"}, "context": {"serpapi_search_results": web_search_results}}
 
-            
-            
     async def run(
         self,
         messages: list[ChatCompletionMessageParam],

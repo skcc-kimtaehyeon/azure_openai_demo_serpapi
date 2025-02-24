@@ -92,6 +92,7 @@
         "useSemanticCaptions": "Usa didascalie semantiche",
         "useSuggestFollowupQuestions": "Suggerisci domande di follow-up",
         "useGPT4V": "Usa il modello GPT Vision",
+        "useSerpAPI": "Use SerpAPI search",
         "gpt4VInput": {
             "label": "Input del modello GPT Vision",
             "options": {

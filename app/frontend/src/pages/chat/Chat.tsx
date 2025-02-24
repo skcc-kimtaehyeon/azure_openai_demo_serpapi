@@ -59,6 +59,8 @@ const Chat = () => {
     const [gpt4vInput, setGPT4VInput] = useState<GPT4VInput>(GPT4VInput.TextAndImages);
     const [useGPT4V, setUseGPT4V] = useState<boolean>(false);
 
+    const [useSerpAPI, setSerpAPI] = useState<boolean>(false);
+
     const lastQuestionRef = useRef<string>("");
     const chatMessageStreamEnd = useRef<HTMLDivElement | null>(null);
 
@@ -203,6 +205,7 @@ const Chat = () => {
                         vector_fields: vectorFieldList,
                         use_gpt4v: useGPT4V,
                         gpt4v_input: gpt4vInput,
+                        useSerpAPI: useSerpAPI,
                         language: i18n.language,
                         ...(seed !== null ? { seed: seed } : {})
                     }
@@ -317,6 +320,9 @@ const Chat = () => {
                 break;
             case "retrievalMode":
                 setRetrievalMode(value);
+                break;
+            case "useSerpAPI":
+                setSerpAPI(value);
                 break;
         }
     };
@@ -504,6 +510,7 @@ const Chat = () => {
                         includeCategory={includeCategory}
                         retrievalMode={retrievalMode}
                         useGPT4V={useGPT4V}
+                        useSerpAPI={useSerpAPI}
                         gpt4vInput={gpt4vInput}
                         vectorFieldList={vectorFieldList}
                         showSemanticRankerOption={showSemanticRankerOption}

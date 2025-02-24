@@ -33,6 +33,7 @@ export function Component(): JSX.Element {
     const [useSemanticRanker, setUseSemanticRanker] = useState<boolean>(true);
     const [useSemanticCaptions, setUseSemanticCaptions] = useState<boolean>(false);
     const [useGPT4V, setUseGPT4V] = useState<boolean>(false);
+    const [useSerpAPI,setSerpAPI]=useState<boolean>(false);
     const [gpt4vInput, setGPT4VInput] = useState<GPT4VInput>(GPT4VInput.TextAndImages);
     const [includeCategory, setIncludeCategory] = useState<string>("");
     const [excludeCategory, setExcludeCategory] = useState<string>("");
@@ -195,6 +196,9 @@ export function Component(): JSX.Element {
             case "useGPT4V":
                 setUseGPT4V(value);
                 break;
+            case "useSerpAPI":
+                setSerpAPI(value);
+                break;
             case "gpt4vInput":
                 setGPT4VInput(value);
                 break;
@@ -325,6 +329,7 @@ export function Component(): JSX.Element {
                     includeCategory={includeCategory}
                     retrievalMode={retrievalMode}
                     useGPT4V={useGPT4V}
+                    useSerpAPI={useSerpAPI}
                     gpt4vInput={gpt4vInput}
                     vectorFieldList={vectorFieldList}
                     showSemanticRankerOption={showSemanticRankerOption}

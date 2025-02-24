@@ -92,6 +92,7 @@
         "useSemanticCaptions": "セマンティック・キャプションを使用",
         "useSuggestFollowupQuestions": "フォローアップの質問を提案",
         "useGPT4V": "GPT Visionモデルを使用",
+        "useSerpAPI": "Use SerpAPI search",
         "gpt4VInput": {
             "label": "GPT Visionモデルの入力",
             "options": {

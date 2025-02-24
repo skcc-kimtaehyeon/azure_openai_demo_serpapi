@@ -215,11 +215,11 @@ async def chat(auth_claims: Dict[str, Any]):
     request_json = await request.get_json()
     context = request_json.get("context", {})
     context["auth_claims"] = auth_claims
-    logging.info(f"auth_claims: {auth_claims}")
-    if "overrides" not in context:
-        context["overrides"] = {}
-    if "use_serpapi_search" not in context["overrides"]:
-        context["overrides"]["use_serpapi_search"] = True  # 기본값 활성화
+    # logging.info(f"auth_claims: {auth_claims}")
+    # if "overrides" not in context:
+    #     context["overrides"] = {}
+    # if "useSerpAPI" not in context["overrides"]:
+    #     context["overrides"]["useSerpAPI"] = True  # 기본값 활성화
     logging.info(f"컨텍스트: {context}")
     try:
         use_gpt4v = context.get("overrides", {}).get("use_gpt4v", False)
@@ -260,10 +260,10 @@ async def chat_stream(auth_claims: Dict[str, Any]):
     context["auth_claims"] = auth_claims
     logging.info(f"auth_claims: {auth_claims}")
     
-    if "overrides" not in context: #overrides가 없을 경우 overrides를 만듬
-        context["overrides"] = {}
-    if "use_serpapi_search" not in context["overrides"]: #만약 overrides 구성 중 serpapi_search 관련 설정이 없을 경우 추가
-        context["overrides"]["use_serpapi_search"] = True  # 기본값 활성화
+    # if "overrides" not in context: #overrides가 없을 경우 overrides를 만듬
+    #     context["overrides"] = {}
+    # if "useSerpAPI" not in context["overrides"]: #만약 overrides 구성 중 serpapi_search 관련 설정이 없을 경우 추가
+    #     context["overrides"]["useSerpAPI"] = True  # 기본값 활성화
     logging.info(f"컨텍스트: {context}")
 
     try:

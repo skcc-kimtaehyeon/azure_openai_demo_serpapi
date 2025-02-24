@@ -92,6 +92,7 @@
         "useSemanticCaptions": "Usar subtítulos semánticos",
         "useSuggestFollowupQuestions": "Sugerir preguntas de seguimiento",
         "useGPT4V": "Usar modelo de visión GPT",
+        "useSerpAPI": "Use SerpAPI search",
         "gpt4VInput": {
             "label": "Entradas del modelo de visión GPT",
             "options": {

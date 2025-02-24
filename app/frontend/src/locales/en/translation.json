@@ -92,6 +92,7 @@
         "useSemanticCaptions": "Use semantic captions",
         "useSuggestFollowupQuestions": "Suggest follow-up questions",
         "useGPT4V": "Use GPT vision model",
+        "useSerpAPI": "Use SerpAPI search",
         "gpt4VInput": {
             "label": "GPT vision model inputs",
             "options": {
@@ -118,6 +119,7 @@
         },
         "useOidSecurityFilter": "Use oid security filter",
         "useGroupsSecurityFilter": "Use groups security filter",
+
         "shouldStream": "Stream chat completion responses"
     },
 

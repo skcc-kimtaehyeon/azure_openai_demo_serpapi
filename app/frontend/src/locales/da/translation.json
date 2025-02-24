@@ -88,6 +88,7 @@
         "useSemanticCaptions": "Brug semantiske billedtekster",
         "useSuggestFollowupQuestions": "Foreslå opfølgende spørgsmål",
         "useGPT4V": "Brug GPT vision model",
+        "useSerpAPI": "Use SerpAPI search",
         "gpt4VInput": {
             "label": "GPT vision model input",
             "options": {
