@@ -26,6 +26,13 @@ export const enum SerpAPILocalOptions{
     kr="kr",
     jp="jp"
 }
+export enum SearchTypeOptions{
+    image= "image",
+    video= "video",
+    news= "news",
+    shopping= "shopping"
+}
+
 
 
 export type ChatAppRequestOverrides = {
@@ -53,6 +60,7 @@ export type ChatAppRequestOverrides = {
     gpt4v_input?: GPT4VInput;
     vector_fields: VectorFieldOptions[];
     language: string;
+    Search_Types?: SearchTypeOptions[];  
 };
 
 export type ResponseMessage = {

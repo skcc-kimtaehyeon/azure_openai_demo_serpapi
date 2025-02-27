@@ -5,7 +5,7 @@ import { Panel, DefaultButton, Spinner } from "@fluentui/react";
 
 import styles from "./Ask.module.css";
 
-import { askApi, configApi, ChatAppResponse, ChatAppRequest, RetrievalMode, VectorFieldOptions, GPT4VInput, SpeechConfig, SerpAPILanguageOptions, SerpAPILocalOptions } from "../../api";
+import { askApi, configApi, ChatAppResponse, ChatAppRequest, RetrievalMode, VectorFieldOptions, GPT4VInput, SpeechConfig, SerpAPILanguageOptions, SerpAPILocalOptions, SearchTypeOptions } from "../../api";
 import { Answer, AnswerError } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
 import { ExampleList } from "../../components/Example";
@@ -38,6 +38,7 @@ export function Component(): JSX.Element {
     const [SerpAPINum, setSerpAPINum] = useState<number> (3);
     const [SerpAPILanguage, setSerpAPILanguage] = useState<SerpAPILanguageOptions>(SerpAPILanguageOptions.ko)
     const [SerpAPILocal, setSerpAPILocal] = useState<SerpAPILocalOptions> (SerpAPILocalOptions.kr)
+    const [Search_Types, setSearchTypes] = useState<SearchTypeOptions[]>(Object.values(SearchTypeOptions));
 
     const [gpt4vInput, setGPT4VInput] = useState<GPT4VInput>(GPT4VInput.TextAndImages);
     const [includeCategory, setIncludeCategory] = useState<string>("");
@@ -141,6 +142,7 @@ export function Component(): JSX.Element {
                         SerpAPINum: SerpAPINum,
                         SerpAPILanguage: SerpAPILanguage,
                         SerpAPILocal:SerpAPILocal,
+                        Search_Types:Search_Types,
                         language: i18n.language,
                         ...(seed !== null ? { seed: seed } : {})
                     }
@@ -225,6 +227,12 @@ export function Component(): JSX.Element {
                 break;
             case "retrievalMode":
                 setRetrievalMode(value);
+                break;
+            case "Search_Types":
+                if (Array.isArray(value)) {
+                    console.log("Search_Types 변경됨:", value);
+                    setSearchTypes(value);
+                }
                 break;
         }
     };
@@ -361,6 +369,7 @@ export function Component(): JSX.Element {
                     useLogin={!!useLogin}
                     loggedIn={loggedIn}
                     requireAccessControl={requireAccessControl}
+                    Search_Types={Search_Types}
                     onChange={handleSettingsChange}
                 />
                 {useLogin && <TokenClaimsDisplay />}

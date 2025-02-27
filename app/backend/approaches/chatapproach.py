@@ -97,7 +97,13 @@ class ChatApproach(Approach, ABC):
             web_search_results = self.search_with_serpapi(user_query, serp_api_language, serp_api_local, serp_api_num)
             content += f"\n\n web 검색 결과 : {web_search_results}"
             extra_info["serpapi_search_results"] = web_search_results
-            
+            logging.info(f"extra_info <SerpAPI search results>: {extra_info['serpapi_search_results']}")
+            search_types = overrides.get("Search_Types")
+            for search_type in search_types:
+                web_search_results_ver2 = self.search_with_serpapi_using_types(user_query,serp_api_language,serp_api_local,serp_api_num, search_type)
+                extra_type = "serpapi_search_results_" + search_type
+                extra_info[extra_type] = web_search_results_ver2
+                logging.info(f"Result of SerpAPI using search_type: {web_search_results_ver2}")
         logging.info(f"검색 결과: {web_search_results}")
         # web_search_results = ""
         # if overrides.get("use_serpapi_search", True):
@@ -170,7 +176,18 @@ class ChatApproach(Approach, ABC):
             serp_api_language = overrides.get("SerpAPILanguage", "ko")  # 기본값: "ko"
             serp_api_local = overrides.get("SerpAPILocal", "kr")  # 기본값: "kr"
             serp_api_num = overrides.get("SerpAPINum", 3)  # 기본값: 3
-            web_search_results = self.search_with_serpapi(user_query, serp_api_language, serp_api_local, serp_api_num)
+            search_types = overrides.get("Search_Types")
+            logging.info(f"type of object: {type(search_types)}")
+            logging.info(f"Search_Types: {search_types}")
+            web_search_results = ""
+            # web_search_results = self.search_with_serpapi(user_query, serp_api_language, serp_api_local, serp_api_num, search_types)
+            # search_types = overrides.get("Search_Types")
+            for search_type in search_types:
+                web_search_results_ver2 = self.search_with_serpapi_using_types(user_query,serp_api_language,serp_api_local,serp_api_num, search_type)
+                extra_type = "serpapi_search_results_" + search_type
+                extra_info[extra_type] = web_search_results_ver2
+                logging.info(f"Result of SerpAPI using search_type: {web_search_results_ver2}")
+                # web_search_results += search_type + web_search_results_ver2
             yield {"delta": {"role": "assistant", "content": f"\n\n**웹 검색 결과**\n{web_search_results}"}}
         logging.info(f"검색 결과: {web_search_results}")
         

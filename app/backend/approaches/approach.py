@@ -135,6 +135,37 @@ class Approach(ABC):
         self.vision_token_provider = vision_token_provider
         self.prompt_manager = prompt_manager
     
+    def search_with_serpapi_using_types(self, query: str, language: str = "ko", local: str = "kr", num: int = 3, search_type: str = "web"):
+        """
+        SerpAPI를 사용하여 선택적인 검색을 수행
+        search_type: "web", "image", "video", "news", "shopping"
+        """        
+        try:
+            tbm_map = {
+                "image": "isch",
+                "video": "vid",
+                "news": "nws",
+                # "shopping": "shop"
+            }
+            
+            params = {
+                "q": query,
+                "hl": "en",
+                "gl": "us",
+                "api_key": SERPAPI_KEY
+            }
+            
+            if search_type in tbm_map:
+                params["tbm"] = tbm_map[search_type]
+            
+            search = GoogleSearch(params)
+            results = search.get_dict()
+            logging.info(results)
+            return results
+        except Exception as e:
+            logging.error(f"웹 검색 중 오류 발생: {str(e)}")
+            return f"Error during search: {str(e)}"
+
     def search_with_serpapi(self, query: str, language: str = "ko", local: str = "kr", num: int = 3) -> str:
         """
         SerpAPI를 사용하여 웹 검색을 수행하는 메서드.
@@ -156,6 +187,9 @@ class Approach(ABC):
                 return "No search results available."
             #결과가 있다면...
             search_results = results.get("organic_results", [])
+            logging.info("---------------검색 결과---------------")
+            logging.info(f"search_results: {search_results}")
+            logging.info("--------------------------------------------------------------")
             return "\n".join([f"{idx+1}. {res['title']} - {res['link']}" for idx, res in enumerate(search_results)])
 
         except Exception as e:

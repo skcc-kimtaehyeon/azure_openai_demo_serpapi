@@ -19,7 +19,8 @@ import {
     GPT4VInput,
     SpeechConfig,
     SerpAPILanguageOptions,
-    SerpAPILocalOptions
+    SerpAPILocalOptions,
+    SearchTypeOptions
 } from "../../api";
 import { Answer, AnswerError, AnswerLoading } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
@@ -65,6 +66,7 @@ const Chat = () => {
     const [SerpAPINum, setSerpAPINum] = useState<number> (3);
     const [SerpAPILanguage, setSerpAPILanguage] = useState<SerpAPILanguageOptions>(SerpAPILanguageOptions.ko)
     const [SerpAPILocal, setSerpAPILocal] = useState<SerpAPILocalOptions> (SerpAPILocalOptions.kr)
+    const [Search_Types, setSearchTypes] = useState<SearchTypeOptions[]>(Object.values(SearchTypeOptions));
     
     const lastQuestionRef = useRef<string>("");
     const chatMessageStreamEnd = useRef<HTMLDivElement | null>(null);
@@ -214,6 +216,7 @@ const Chat = () => {
                         SerpAPINum: SerpAPINum,
                         SerpAPILanguage: SerpAPILanguage,
                         SerpAPILocal:SerpAPILocal,
+                        Search_Types:Search_Types,
                         language: i18n.language,
                         ...(seed !== null ? { seed: seed } : {})
                     }
@@ -269,6 +272,10 @@ const Chat = () => {
 
     useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "smooth" }), [isLoading]);
     useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "auto" }), [streamedAnswers]);
+    useEffect(() => {
+        console.log("현재 Search_Types:", Search_Types);
+    }, [Search_Types]);
+    
     useEffect(() => {
         getConfig();
     }, []);
@@ -340,6 +347,12 @@ const Chat = () => {
                 break;
             case "SerpAPILocal":
                 setSerpAPILocal(value);
+                break;
+            case "Search_Types":
+                if (Array.isArray(value)) {
+                    console.log("Search_Types 변경됨:", value);
+                    setSearchTypes(value);
+                }
                 break;
         }
     };
@@ -544,6 +557,7 @@ const Chat = () => {
                         shouldStream={shouldStream}
                         useSuggestFollowupQuestions={useSuggestFollowupQuestions}
                         showSuggestFollowupQuestions={true}
+                        Search_Types={Search_Types}
                         onChange={handleSettingsChange}
                     />
                     {useLogin && <TokenClaimsDisplay />}

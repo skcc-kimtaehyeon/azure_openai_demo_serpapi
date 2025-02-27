@@ -1,3 +1,15 @@
 .settingsSeparator {
     margin-top: 0.75rem;
 }
+fieldset {
+    border: none;
+    margin: 10px 0;
+    padding: 10px;
+}
+legend {
+    font-size: 14px;
+    font-weight: bold;
+}
+.checkboxItem {
+    margin: 5px 0;
+}

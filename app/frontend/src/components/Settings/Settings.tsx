@@ -4,7 +4,7 @@ import { TextField, ITextFieldProps, Checkbox, ICheckboxProps, Dropdown, IDropdo
 import { HelpCallout } from "../HelpCallout";
 import { GPT4VSettings } from "../GPT4VSettings";
 import { VectorSettings } from "../VectorSettings";
-import { RetrievalMode, VectorFieldOptions, GPT4VInput, SerpAPILanguageOptions, SerpAPILocalOptions } from "../../api";
+import { RetrievalMode, VectorFieldOptions, GPT4VInput, SerpAPILanguageOptions, SerpAPILocalOptions, SearchTypeOptions } from "../../api";
 import styles from "./Settings.module.css";
 
 // Add type for onRenderLabel
@@ -27,6 +27,7 @@ export interface SettingsProps {
     SerpAPINum:number;
     SerpAPILanguage:SerpAPILanguageOptions;
     SerpAPILocal:SerpAPILocalOptions;
+    Search_Types:SearchTypeOptions[];
     gpt4vInput: GPT4VInput;
     vectorFieldList: VectorFieldOptions[];
     showSemanticRankerOption: boolean;
@@ -63,6 +64,7 @@ export const Settings = ({
     SerpAPINum,
     SerpAPILanguage,
     SerpAPILocal,
+    Search_Types,
     gpt4vInput,
     vectorFieldList,
     showSemanticRankerOption,
@@ -114,7 +116,14 @@ export const Settings = ({
     const suggestFollowupQuestionsFieldId = useId("suggestFollowupQuestionsField");
     const SerpApiLanguageFieldId = useId("SerpApiLanguageField");
     const SerpApiLocalFieldId = useId("SerpApiLocalField");
-    const SerpApiNumFieldId = useId("SerpApiNumField")
+    const SerpApiNumFieldId = useId("SerpApiNumField");
+    const SearchTypesField = useId("SearchTypes");
+    const SearchTypesFieldId = useId("SearchTypesField");
+    const searchTypeOptions = Object.values(Search_Types) as SearchTypeOptions[];
+    console.log("✅ Search_Types 전체:", Search_Types);
+    console.log("✅ Object.keys(Search_Types):", Object.keys(Search_Types));
+    console.log("✅ Object.values(Search_Types):", Object.values(Search_Types));
+    
     const renderLabel = (props: RenderLabelType | undefined, labelId: string, fieldId: string, helpText: string) => (
         <HelpCallout labelId={labelId} fieldId={fieldId} helpText={helpText} label={props?.label} />
     );
@@ -260,6 +269,37 @@ export const Settings = ({
                 onChange={(_ev, option) => onChange("SerpAPILocal", option?.key)}
                 aria-labelledby="SerpApiLocalId"
             />
+            {/* 여기에 Search Type Checkbox */}
+            
+            <fieldset className={styles.settingsSeparator}>
+                <legend>SerpAPI 검색 유형</legend>
+                {searchTypeOptions.length > 0 ? (
+                    searchTypeOptions.map((type) => (
+                        <Checkbox
+                            key={type}
+                            id={`search-type-${type}`}
+                            className={styles.checkboxItem}
+                            checked={Search_Types.includes(type)}
+                            label={type}
+                            onChange={(_ev, checked) => {
+                                const updatedSelection = checked
+                                    ? [...Search_Types, type] // 체크 시 추가
+                                    : Search_Types.filter((t) => t !== type); // 체크 해제 시 제거
+
+                                console.log("✅ Updated Search_Types:", updatedSelection);
+                                onChange("Search_Types", updatedSelection);
+                            }}
+                        />
+                    ))
+                ) : (
+                    <p style={{ fontSize: "12px", color: "#888" }}>검색 유형을 불러오는 중...</p>
+                )}
+            </fieldset>
+
+
+
+
+
             {showSemanticRankerOption && (
                 <>
                     <Checkbox
